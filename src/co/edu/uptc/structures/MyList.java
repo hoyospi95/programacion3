@@ -44,12 +44,12 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean contains(Object o) {
-		Node<T> current = head;
-		while(current != null){
-			if(current.getValue().equals(o)){
+		Node<T> currentNode = head;
+		while(currentNode != null){
+			if(currentNode.getValue().equals(o)){
 				return true;
 			}
-			current = current.getNext();
+			currentNode = currentNode.getNext();
 		}
 		return false;
 	}
