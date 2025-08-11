@@ -10,14 +10,24 @@ public class MyList<T> implements List<T> {
 	
 	@Override
 	public boolean add(T e) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'add'");
+		boolean added = false;
+		if(head == null){
+			head = new Node<T>(e);
+			added = true;
+		}else{
+			Node<T> actual = head;
+			while(actual.getNext() != null){
+				actual = actual.getNext()
+			}
+			actual.setNext(new Node<T>(e));
+			added = true;
+		}
+		return added;
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'clear'");
+		head = null;
 	}
 	
 	@Override
