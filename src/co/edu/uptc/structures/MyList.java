@@ -17,7 +17,7 @@ public class MyList<T> implements List<T> {
 		}else{
 			Node<T> actual = head;
 			while(actual.getNext() != null){
-				actual = actual.getNext()
+				actual = actual.getNext();
 			}
 			actual.setNext(new Node<T>(e));
 			added = true;
@@ -156,4 +156,10 @@ public class MyList<T> implements List<T> {
 		throw new UnsupportedOperationException("Unimplemented method 'subList'");
 	}
 
+	@Override
+	public String toString() {
+		return "MyList [head=" + head + "]";
+	}
+
+	
 }
