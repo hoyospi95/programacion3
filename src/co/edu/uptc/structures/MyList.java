@@ -69,7 +69,7 @@ public class MyList<T> implements List<T> {
 	@Override
 	public boolean remove(Object o) {
         Node<T> actual = head, previous = null;
-        while ((actual.getValue()).equals(o)0){
+        while (actual != null) {
             if ((actual.getValue()).equals(o)) {
                 if (previous == null) head = actual.getNext();
                 else previous.setNext((actual.getNext()));
