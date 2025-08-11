@@ -7,16 +7,16 @@ import java.util.ListIterator;
 
 public class MyList<T> implements List<T> {
 	private Node<T> head;
-	
+
 	@Override
 	public boolean add(T e) {
 		boolean added = false;
-		if(head == null){
+		if (head == null) {
 			head = new Node<T>(e);
 			added = true;
-		}else{
+		} else {
 			Node<T> actual = head;
-			while(actual.getNext() != null){
+			while (actual.getNext() != null) {
 				actual = actual.getNext();
 			}
 			actual.setNext(new Node<T>(e));
@@ -29,7 +29,7 @@ public class MyList<T> implements List<T> {
 	public void clear() {
 		head = null;
 	}
-	
+
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
@@ -81,7 +81,7 @@ public class MyList<T> implements List<T> {
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+		throw new UnsupportedOperationException("Unimplemented method 'addAll'"); // wazaaaa asas
 	}
 
 	@Override
@@ -161,5 +161,4 @@ public class MyList<T> implements List<T> {
 		return "MyList [head=" + head + "]";
 	}
 
-	
 }
