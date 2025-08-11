@@ -44,8 +44,14 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'contains'");
+		Node<T> current = head;
+		while(current != null){
+			if(current.getValue().equals(o)){
+				return true;
+			}
+			current = current.getNext();
+		}
+		return false;
 	}
 
 	@Override
