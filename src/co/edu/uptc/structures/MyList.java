@@ -123,7 +123,7 @@ public class MyList<T> implements List<T> {
 	@Override
 	public T remove(int index) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'remove'");
+		throw new UnsupportedOperationException("Unimplemented method 'remove'");//wawa
 	}
 
 	@Override
