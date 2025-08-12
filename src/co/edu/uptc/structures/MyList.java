@@ -198,8 +198,23 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public T remove(int index) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'remove'");
+		if (index < 0){
+			throw new ArrayIndexOutOfBoundsException();
+		}
+		if (index == 0) {
+			T removedElement = head.getValue();
+			head = head.getNext();
+			return removedElement;
+		}
+		Node<T> current = head.getNext();
+		Node<T> previous = head;
+		for (int i = 0; i < index-1; i++) {
+			current = current.getNext();
+			previous = previous.getNext();
+		}
+		T removedElement = current.getValue();
+		previous.setNext(current.getNext());
+		return removedElement;
 	}
 
 	@Override
