@@ -80,14 +80,17 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+		return addAll(this.size(), c);
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+        if (c.isEmpty())
+            return false;
+        for (T t : c) {
+            this.add(index++,t);
+        }
+		return true;
 	}
 
 	@Override
