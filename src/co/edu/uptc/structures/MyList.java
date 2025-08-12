@@ -7,16 +7,16 @@ import java.util.ListIterator;
 
 public class MyList<T> implements List<T> {
 	private Node<T> head;
-	
+
 	@Override
 	public boolean add(T e) {
 		boolean added = false;
-		if(head == null){
+		if (head == null) {
 			head = new Node<T>(e);
 			added = true;
-		}else{
+		} else {
 			Node<T> actual = head;
-			while(actual.getNext() != null){
+			while (actual.getNext() != null) {
 				actual = actual.getNext();
 			}
 			actual.setNext(new Node<T>(e));
@@ -29,7 +29,7 @@ public class MyList<T> implements List<T> {
 	public void clear() {
 		head = null;
 	}
-	
+
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
@@ -98,8 +98,40 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'retainAll'");
+		boolean changed = false;
+		Node<T> current = head;
+		Node<T> prev = null;
+
+		while (current != null) {
+			boolean found = false;
+			for (Object o : c) {
+				try {
+					if (current.getValue() == null && c.toArray().equals(null)) {
+						throw new NullPointerException("Este lista contiene null y la colección no permite null");
+					}
+				} catch (NullPointerException e) {
+				}
+				if (current.getValue().equals(o)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				if (prev == null) {
+					head = current.getNext();
+					current = head;
+				} else {
+					prev.setNext(current.getNext());
+					current = current.getNext();
+				}
+				changed = true;
+			} else {
+				prev = current;
+				current = current.getNext();
+			}
+		}
+		return changed;
+
 	}
 
 	@Override
@@ -161,5 +193,4 @@ public class MyList<T> implements List<T> {
 		return "MyList [head=" + head + "]";
 	}
 
-	
 }
