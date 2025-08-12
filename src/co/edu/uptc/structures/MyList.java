@@ -7,16 +7,16 @@ import java.util.ListIterator;
 
 public class MyList<T> implements List<T> {
 	private Node<T> head;
-	
+
 	@Override
 	public boolean add(T e) {
 		boolean added = false;
-		if(head == null){
+		if (head == null) {
 			head = new Node<T>(e);
 			added = true;
-		}else{
+		} else {
 			Node<T> actual = head;
-			while(actual.getNext() != null){
+			while (actual.getNext() != null) {
 				actual = actual.getNext();
 			}
 			actual.setNext(new Node<T>(e));
@@ -29,23 +29,33 @@ public class MyList<T> implements List<T> {
 	public void clear() {
 		head = null;
 	}
-	
+
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'size'");
+		int count = 0;
+    	Node<T> current = head;
+    	while (current != null) {
+        	count++;
+        	current = current.getNext();
+    	}
+    	return count;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'isEmpty'");
+		return head==null;
 	}
 
 	@Override
 	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'contains'");
+		Node<T> currentNode = head;
+		while(currentNode != null){
+			if(currentNode.getValue().equals(o)){
+				return true;
+			}
+			currentNode = currentNode.getNext();
+		}
+		return false;
 	}
 
 	@Override
@@ -68,8 +78,17 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        Node<T> actual = head, previous = null;
+        while (actual != null) {
+            if ((actual.getValue()).equals(o)) {
+                if (previous == null) head = actual.getNext();
+                else previous.setNext((actual.getNext()));
+                return true;
+            }
+            previous = actual;
+            actual = actual.getNext();
+        }
+        return false;
 	}
 
 	@Override
@@ -80,8 +99,50 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+		if (c == null) {
+			throw new NullPointerException("La colección no puede ser null.");
+		}
+
+		if (c == this && head != null) {
+			throw new IllegalArgumentException("No se puede añadir la lista a sí misma.");
+		}
+
+		if (c.isEmpty()) {
+			return false;
+		}
+
+		Node<T> current = head;
+		if (current == null) {
+			Iterator<? extends T> it = c.iterator();
+			T firstElement = it.next();
+			if (firstElement == null) {
+				throw new NullPointerException("Elemento null no permitido.");
+			}
+			head = new Node<>(firstElement);
+			current = head;
+
+			while (it.hasNext()) {
+				T element = it.next();
+				if (element == null) {
+					throw new NullPointerException("Elemento null no permitido.");
+				}
+				current.setNext(new Node<>(element));
+				current = current.getNext();
+			}
+			return true;
+		} else {
+			while (current.getNext() != null) {
+				current = current.getNext();
+			}
+			for (T element : c) {
+				if (element == null) {
+					throw new NullPointerException("Elemento null no permitido.");
+				}
+				current.setNext(new Node<>(element));
+				current = current.getNext();
+			}
+			return true;
+		}
 	}
 
 	@Override
@@ -116,8 +177,23 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public void add(int index, T element) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'add'");
+
+		if (index == 0) {
+			Node<T> newNode = new Node<T>(element);
+			newNode.setNext(head);
+			head = newNode;
+		} else {
+			Node<T> actual = head;
+
+			for (int i = 0; i < index - 1 && actual.getNext() != null; i++) {
+				actual = actual.getNext();
+			}
+
+			Node<T> newNode = new Node<T>(element);
+			newNode.setNext(actual.getNext());
+			actual.setNext(newNode);
+		}
+
 	}
 
 	@Override
@@ -176,5 +252,4 @@ public class MyList<T> implements List<T> {
 		return "MyList [head=" + head + "]";
 	}
 
-	
 }

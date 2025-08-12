@@ -9,7 +9,7 @@ public class Test {
         list.add("juan");
         list.add("luis");
         list.add("ana");
-        System.out.println(list.remove(1));
+
         System.out.println(list);
     }
 }
