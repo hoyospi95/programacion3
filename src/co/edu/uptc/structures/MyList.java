@@ -159,8 +159,40 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'retainAll'");
+		boolean changed = false;
+		Node<T> current = head;
+		Node<T> prev = null;
+
+		while (current != null) {
+			boolean found = false;
+			for (Object o : c) {
+				try {
+					if (current.getValue() == null && c.toArray().equals(null)) {
+						throw new NullPointerException("Este lista contiene null y la colección no permite null");
+					}
+				} catch (NullPointerException e) {
+				}
+				if (current.getValue().equals(o)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				if (prev == null) {
+					head = current.getNext();
+					current = head;
+				} else {
+					prev.setNext(current.getNext());
+					current = current.getNext();
+				}
+				changed = true;
+			} else {
+				prev = current;
+				current = current.getNext();
+			}
+		}
+		return changed;
+
 	}
 
 	@Override
