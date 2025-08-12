@@ -177,8 +177,23 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public void add(int index, T element) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'add'");
+
+		if (index == 0) {
+			Node<T> newNode = new Node<T>(element);
+			newNode.setNext(head);
+			head = newNode;
+		} else {
+			Node<T> actual = head;
+
+			for (int i = 0; i < index - 1 && actual.getNext() != null; i++) {
+				actual = actual.getNext();
+			}
+
+			Node<T> newNode = new Node<T>(element);
+			newNode.setNext(actual.getNext());
+			actual.setNext(newNode);
+		}
+
 	}
 
 	@Override
