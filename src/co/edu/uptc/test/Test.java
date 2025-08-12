@@ -7,9 +7,9 @@ public class Test {
         MyList<String> list = new MyList<>();
 
         list.add("juan");
-        list.add("kuis");
+        list.add("luis");
         list.add("ana");
-
+        System.out.println(list.remove(1));
         System.out.println(list);
     }
 }
