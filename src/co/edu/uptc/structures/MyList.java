@@ -7,7 +7,7 @@ import java.util.ListIterator;
 
 public class MyList<T> implements List<T> {
 	private Node<T> head;
-	
+
 	@Override
 	public boolean add(T e) {
 		boolean added = false;
@@ -29,7 +29,7 @@ public class MyList<T> implements List<T> {
 	public void clear() {
 		head = null;
 	}
-	
+
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
@@ -74,8 +74,30 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'containsAll'");
+		 if (c == null) {
+		        throw new NullPointerException("The specified collection is null");
+		    }
+
+		    for (Object searchElement : c) {
+		        boolean found = false;
+		        Node<T> current = head;
+
+		        while (current != null) {
+		            T listElement = current.getValue();
+
+		            if ((searchElement == null && listElement == null) ||
+		                (searchElement != null && searchElement.equals(listElement))) {
+		                found = true;
+		                break;
+		            }
+		            current = current.getNext();
+		        }
+
+		        if (!found) {
+		            return false;
+		        }
+		    }
+		    return true;
 	}
 
 	@Override
@@ -161,5 +183,5 @@ public class MyList<T> implements List<T> {
 		return "MyList [head=" + head + "]";
 	}
 
-	
+
 }
