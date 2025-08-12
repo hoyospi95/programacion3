@@ -32,8 +32,13 @@ public class MyList<T> implements List<T> {
 	
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'size'");
+		int count = 0;
+    	Node<T> current = head;
+    	while (current != null) {
+        	count++;
+        	current = current.getNext();
+    	}
+    	return count;
 	}
 
 	@Override
