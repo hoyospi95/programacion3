@@ -10,6 +10,8 @@ public class Test {
         list.add("kuis");
         list.add("ana");
 
+        list.add(2, "pedro");
+
         System.out.println(list);
     }
 }
