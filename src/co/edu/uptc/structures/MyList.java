@@ -91,10 +91,30 @@ public class MyList<T> implements List<T> {
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'removeAll'");
+public boolean removeAll(Collection<?> c) {
+    if (c == null || head == null) {
+        return false; 
 	}
+
+    boolean removed = false;
+    while (head != null && c.contains(head.getValue())) {
+        head = head.getNext();
+        removed = true;
+    }
+
+    Node<T> current = head;
+    while (current != null && current.getNext() != null) {
+        if (c.contains(current.getNext().getValue())) {
+            current.setNext(current.getNext().getNext());
+            removed = true;
+        } else {
+            current = current.getNext();
+        }
+    }
+
+    return removed;
+}
+
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
