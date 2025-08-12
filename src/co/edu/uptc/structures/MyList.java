@@ -1,5 +1,6 @@
 package co.edu.uptc.structures;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -71,9 +72,30 @@ public class MyList<T> implements List<T> {
 	}
 
 	@Override
+	//comentario de prueba git
 	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+		int size = 0;
+		Node<T> current = (Node<T>) head;
+		while (current != null) {
+			size++;
+			current = current.getNext();
+		}
+
+		if (a.length < size) {
+			a = (T[]) Array.newInstance(a.getClass().getComponentType(), size);
+		}
+		
+		current = (Node<T>) head;
+		int index = 0;
+		while (current != null) {
+			a[index++] = (T) current.getValue();
+			current = current.getNext(); 
+		}
+
+		if (a.length > size) {
+			a[size] = null;
+		}
+		return a;
 	}
 
 	@Override
