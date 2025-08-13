@@ -83,47 +83,22 @@ public class MyList<T> implements List<T> {
 		if (c == null) {
 			throw new NullPointerException("La colección no puede ser null.");
 		}
-
 		if (c == this && head != null) {
 			throw new IllegalArgumentException("No se puede añadir la lista a sí misma.");
 		}
-
 		if (c.isEmpty()) {
 			return false;
 		}
 
-		Node<T> current = head;
-		if (current == null) {
-			Iterator<? extends T> it = c.iterator();
-			T firstElement = it.next();
-			if (firstElement == null) {
+		boolean modified = false;
+		for (T element : c) {
+			if (element == null) {
 				throw new NullPointerException("Elemento null no permitido.");
 			}
-			head = new Node<>(firstElement);
-			current = head;
-
-			while (it.hasNext()) {
-				T element = it.next();
-				if (element == null) {
-					throw new NullPointerException("Elemento null no permitido.");
-				}
-				current.setNext(new Node<>(element));
-				current = current.getNext();
-			}
-			return true;
-		} else {
-			while (current.getNext() != null) {
-				current = current.getNext();
-			}
-			for (T element : c) {
-				if (element == null) {
-					throw new NullPointerException("Elemento null no permitido.");
-				}
-				current.setNext(new Node<>(element));
-				current = current.getNext();
-			}
-			return true;
+			add(element); 
+			modified = true;
 		}
+		return modified;
 	}
 
 	@Override
