@@ -17,7 +17,7 @@ public class MyList<T> implements List<T> {
 		}else{
 			Node<T> actual = head;
 			while(actual.getNext() != null){
-				actual = actual.getNext()
+				actual = actual.getNext();
 			}
 			actual.setNext(new Node<T>(e));
 			added = true;
@@ -74,8 +74,30 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'containsAll'");
+		if (c == null) {
+			throw new NullPointerException("The specified collection is null");
+		}
+
+		for (Object searchElement : c) {
+			boolean found = false;
+			Node<T> current = head;
+
+			while (current != null) {
+				T listElement = current.getValue();
+
+				if ((searchElement == null && listElement == null) ||
+						(searchElement != null && searchElement.equals(listElement))) {
+					found = true;
+					break;
+				}
+				current = current.getNext();
+			}
+
+			if (!found) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
