@@ -1,7 +1,6 @@
 package co.edu.uptc.structures;
 
 
-import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -410,7 +409,7 @@ public class MyList<T> implements List<T> {
 	public ListIterator<T> listIterator(int index) {
   
     if (index < 0 || index > size()) {
-        throw new IndexOutOfBoundsException();
+        throw new IndexOutOfBoundsException("Index: " + index);
     }
 
 	return new ListIterator<T>() {
