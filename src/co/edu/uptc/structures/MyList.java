@@ -1,6 +1,6 @@
 package co.edu.uptc.structures;
 
-import java.lang.reflect.Array;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -272,9 +272,23 @@ public class MyList<T> implements List<T> {
 	}
 
 	@Override
-	public int indexOf(Object o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'indexOf'");
+	public int indexOf(Object o){
+		int index = 0;
+		Node<T> current = head;
+		while (current!=null) {
+			if (o==null) {
+				if (current.getValue()==null) {
+					return index;
+				}
+			}else{
+				if (o.equals(current.getValue())) {
+					return index;
+				}
+			}
+			index++;
+			current = current.getNext();
+		}
+		return -1;
 	}
 
 	@Override
