@@ -23,5 +23,5 @@ public class Node<T> {
         return "Node [value=" + value + ", next=" + next + "]";
     }
 
-    
+
 }
