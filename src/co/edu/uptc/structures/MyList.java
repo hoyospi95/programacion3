@@ -33,7 +33,7 @@ public class MyList<T> implements List<T> {
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'size'");
+		throw new UnsupportediOperationException("Unimplemented method 'size'");
 	}
 
 	@Override
@@ -108,10 +108,34 @@ public class MyList<T> implements List<T> {
 		throw new UnsupportedOperationException("Unimplemented method 'get'");
 	}
 
-	@Override
 	public T set(int index, T element) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'set'");
+		validateSetExceptions(index, element);
+		Node<T> updatedNode = getNodeAt(index);
+		T oldValue = updatedNode.getValue();
+		updatedNode.setValue(element);
+		return oldValue;
+	}
+
+	private void validateSetExceptions(int index, T element) {
+		if (index < 0) {
+			throw new IndexOutOfBoundsException("Index: " + index);
+		}
+		if (element == null) {
+			throw new NullPointerException("The Element is null");
+		}
+	}
+
+	private Node<T> getNodeAt(int index) {
+		Node<T> current = head;
+		int currentIndex = 0;
+		while (current != null) {
+			if (currentIndex == index) {
+				return current;
+			}
+			current = current.getNext();
+			currentIndex++;
+		}
+		throw new IndexOutOfBoundsException("Index: " + index);
 	}
 
 	@Override
