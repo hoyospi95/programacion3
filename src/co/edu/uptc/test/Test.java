@@ -10,6 +10,6 @@ public class Test {
         list.add("luis");
         list.add("ana");
         
-        System.out.println(list);
+        System.out.println(list.listIterator(1).previous());
     }
 }

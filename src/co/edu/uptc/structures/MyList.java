@@ -1,7 +1,7 @@
 package co.edu.uptc.structures;
 
+
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -170,8 +170,20 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'addAll'");
+        if(index<0||index>size()){
+            throw new IndexOutOfBoundsException("index "+index+" is out of range");
+        }
+        if (c.isEmpty()){
+            return false;
+        }
+        for (T t : c) {
+            if (t==null)
+                throw new NullPointerException("this list does not permit null elements");
+        }
+        for (T t : c) {
+            this.add(index++,t);
+        }
+		return true;
 	}
 
 	@Override
@@ -224,14 +236,45 @@ public class MyList<T> implements List<T> {
 		throw new UnsupportedOperationException("Unimplemented method 'get'");
 	}
 
-	@Override
 	public T set(int index, T element) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'set'");
+		validateSetExceptions(index, element);
+		Node<T> updatedNode = getNodeAt(index);
+		T oldValue = updatedNode.getValue();
+		updatedNode.setValue(element);
+		return oldValue;
+	}
+
+	private void validateSetExceptions(int index, T element) {
+		if (index < 0) {
+			throw new IndexOutOfBoundsException("Index: " + index);
+		}
+		if (element == null) {
+			throw new NullPointerException("The Element is null");
+		}
+	}
+
+	private Node<T> getNodeAt(int index) {
+		Node<T> current = head;
+		int currentIndex = 0;
+		while (current != null) {
+			if (currentIndex == index) {
+				return current;
+			}
+			current = current.getNext();
+			currentIndex++;
+		}
+		throw new IndexOutOfBoundsException("Index: " + index);
 	}
 
 	@Override
 	public void add(int index, T element) {
+		if (element == null) {
+			throw new NullPointerException("El elemento no puede ser null");
+		}
+
+		if (index < 0 || index > this.size()) {
+			throw new IndexOutOfBoundsException("Indice fuera de rango");
+		}
 
 		if (index == 0) {
 			Node<T> newNode = new Node<T>(element);
@@ -273,9 +316,23 @@ public class MyList<T> implements List<T> {
 	}
 
 	@Override
-	public int indexOf(Object o) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'indexOf'");
+	public int indexOf(Object o){
+		int index = 0;
+		Node<T> current = head;
+		while (current!=null) {
+			if (o==null) {
+				if (current.getValue()==null) {
+					return index;
+				}
+			}else{
+				if (o.equals(current.getValue())) {
+					return index;
+				}
+			}
+			index++;
+			current = current.getNext();
+		}
+		return -1;
 	}
 
 	@Override
@@ -286,29 +343,172 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public ListIterator<T> listIterator() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
+		return listIterator(0);
+		/*  El metodo listIterador() tiene que utilizar el metodo listIterador(int index) para seguir las normas
+			de codigo limpio es decir, no crear codigo duplicado pero en tal caso de que el metodo con el index
+			no funcione este tampoco funcionaria ya que este metodo depende directamente del otro por lo que
+			hice este comentario con lo que deberia contener en tal caso que es implementarlo sin parametros.
+		Node<T> current = head;
+		int index = 0;
+
+		return new ListIterator<T>() {
+			Node<T> cursor = current;
+			int cursorIndex = index;
+
+			@Override
+			public boolean hasNext() {
+				return cursor != null;
+			}
+
+			@Override
+			public T next() {
+				if (!hasNext()) throw new NoSuchElementException();
+				T value = cursor.data;
+				cursor = cursor.next;
+				cursorIndex++;
+				return value;
+			}
+
+			@Override
+			public boolean hasPrevious() {
+				return cursorIndex > 0;
+			}
+
+			@Override
+			public T previous() {
+				throw new UnsupportedOperationException("Retroceso no implementado");
+			}
+
+			@Override
+			public int nextIndex() {
+				return cursorIndex;
+			}
+
+			@Override
+			public int previousIndex() {
+				return cursorIndex - 1;
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("Remove no implementado");
+			}
+
+			@Override
+			public void set(T e) {
+				throw new UnsupportedOperationException("Set no implementado");
+			}
+
+			@Override
+			public void add(T e) {
+				throw new UnsupportedOperationException("Add no implementado");
+			}
+		}; */
 	}
 
 	@Override
 	public ListIterator<T> listIterator(int index) {
-		if (index < 0 || index > size()) {
-			throw new IndexOutOfBoundsException();
-		}
-		ArrayList<T> list = new ArrayList<T>();
-		Node<T> currentIndex = this.head;
-		while (currentIndex != null) {
-			list.add(currentIndex.getValue());
-			currentIndex = currentIndex.getNext();
-		}
-		return list.listIterator(index);
+  
+    if (index < 0 || index > size()) {
+        throw new IndexOutOfBoundsException();
+    }
 
-	}
+	return new ListIterator<T>() {
+		private Node<T> cursor = getNodeAt(index);
+
+		private int cursorIndex = index;
+
+        @Override
+        public boolean hasNext() {
+            return cursor != null;
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) {
+                throw new java.util.NoSuchElementException();
+            }
+            T value = cursor.getValue();
+            cursor = cursor.getNext();
+            cursorIndex++;
+            return value;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursorIndex > 0;
+        }
+
+        @Override
+        public T previous() {
+            if (!hasPrevious()) {
+                throw new java.util.NoSuchElementException();
+            }
+            Node<T> temp = head;
+            for (int i = 0; i < cursorIndex - 1; i++) {
+                temp = temp.getNext();
+            }
+            cursor = temp;
+            cursorIndex--;
+            return cursor.getValue();
+        }
+
+        @Override
+        public int nextIndex() {
+            return cursorIndex;
+        }
+
+        @Override
+        public int previousIndex() {
+            return cursorIndex - 1;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("remove no implementado");
+        }
+
+        @Override
+        public void set(T e) {
+            if (cursor == null) {
+                throw new IllegalStateException();
+            }
+            cursor.setValue(e);
+        }
+
+        @Override
+        public void add(T e) {
+            throw new UnsupportedOperationException("add no implementado");
+        }
+    };
+}
+
+   
+
+
+
+
+
+	
 
 	@Override
 	public List<T> subList(int fromIndex, int toIndex) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'subList'");
+		List<T> subList = new MyList<T>();
+		if (fromIndex < 0 || toIndex > size() || fromIndex > toIndex) {
+			throw new IndexOutOfBoundsException("illegal endpoint index value");			
+		}
+		Node<T> current = head;
+		int index = 0;
+		while (current != null && index < fromIndex) {
+			current = current.getNext();
+			index++;
+		}
+		while (current != null && index <= toIndex) {
+			subList.add(current.getValue());
+			current = current.getNext();
+			index++;
+		}
+		return subList;
 	}
 
 	@Override
