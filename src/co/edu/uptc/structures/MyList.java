@@ -33,7 +33,7 @@ public class MyList<T> implements List<T> {
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
-		throw new UnsupportediOperationException("Unimplemented method 'size'");
+		throw new UnsupportedOperationException("Unimplemented method 'size'");
 	}
 
 	@Override
