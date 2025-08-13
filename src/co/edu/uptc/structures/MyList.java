@@ -391,11 +391,81 @@ public class MyList<T> implements List<T> {
 		}; */
     }
 
-    @Override
-    public ListIterator<T> listIterator(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
+   @Override
+	public ListIterator<T> listIterator(int index) {
+		if (index < 0 || index > size()) {
+        throw new IndexOutOfBoundsException("Index: " + index);
     }
+
+	return new ListIterator<T>() {
+		private Node<T> cursor = getNodeAt(index);
+
+		private int cursorIndex = index;
+
+        @Override
+        public boolean hasNext() {
+            return cursor != null;
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) {
+                throw new java.util.NoSuchElementException();
+            }
+            T value = cursor.getValue();
+            cursor = cursor.getNext();
+            cursorIndex++;
+            return value;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return cursorIndex > 0;
+        }
+
+        @Override
+        public T previous() {
+            if (!hasPrevious()) {
+                throw new java.util.NoSuchElementException();
+            }
+            Node<T> temp = head;
+            for (int i = 0; i < cursorIndex - 1; i++) {
+                temp = temp.getNext();
+            }
+            cursor = temp;
+            cursorIndex--;
+            return cursor.getValue();
+        }
+
+        @Override
+        public int nextIndex() {
+            return cursorIndex;
+        }
+
+        @Override
+        public int previousIndex() {
+            return cursorIndex - 1;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("remove no implementado");
+        }
+
+        @Override
+        public void set(T e) {
+            if (cursor == null) {
+                throw new IllegalStateException();
+            }
+            cursor.setValue(e);
+        }
+
+        @Override
+        public void add(T e) {
+            throw new UnsupportedOperationException("add no implementado");
+        }
+    };
+}
 
     @Override
     public List<T> subList(int fromIndex, int toIndex) {
