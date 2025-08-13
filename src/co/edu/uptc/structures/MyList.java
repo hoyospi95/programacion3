@@ -407,8 +407,6 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public ListIterator<T> listIterator(int index) {
-  
-    
 		if (index < 0 || index > size()) {
         throw new IndexOutOfBoundsException("Index: " + index);
     }
