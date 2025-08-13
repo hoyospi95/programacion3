@@ -80,13 +80,22 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean addAll(Collection<? extends T> c) {
-		return addAll(this.size(), c);
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'addAll'");
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
-        if (c.isEmpty())
+        if(index<0||index>size()){
+            throw new IndexOutOfBoundsException("index "+index+" is out of range");
+        }
+        if (c.isEmpty()){
             return false;
+        }
+        for (T t : c) {
+            if (t==null)
+                throw new NullPointerException("this list does not permit null elements");
+        }
         for (T t : c) {
             this.add(index++,t);
         }
