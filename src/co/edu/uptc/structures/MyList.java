@@ -293,7 +293,7 @@ public class MyList<T> implements List<T> {
 	}
 
 	@Override
-	public ListIterator<T> listIterator(int index) { //a
+	public ListIterator<T> listIterator(int index) { 
 		if (index < 0 || index > size()) {
 			throw new IndexOutOfBoundsException();
 		}
