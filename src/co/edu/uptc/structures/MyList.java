@@ -297,8 +297,22 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public List<T> subList(int fromIndex, int toIndex) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'subList'");
+		List<T> subList = new MyList<T>();
+		if (fromIndex < 0 || toIndex > size() || fromIndex > toIndex) {
+			throw new IndexOutOfBoundsException("illegal endpoint index value");			
+		}
+		Node<T> current = head;
+		int index = 0;
+		while (current != null && index < fromIndex) {
+			current = current.getNext();
+			index++;
+		}
+		while (current != null && index <= toIndex) {
+			subList.add(current.getValue());
+			current = current.getNext();
+			index++;
+		}
+		return subList;
 	}
 
 	@Override
