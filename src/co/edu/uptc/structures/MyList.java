@@ -116,6 +116,13 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public void add(int index, T element) {
+		if (element == null) {
+			throw new NullPointerException("El elemento no puede ser null");
+		}
+
+		if (index < 0 || index > this.size()) {
+			throw new IndexOutOfBoundsException("Indice fuera de rango");
+		}
 
 		if (index == 0) {
 			Node<T> newNode = new Node<T>(element);
