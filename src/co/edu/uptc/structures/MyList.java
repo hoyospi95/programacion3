@@ -35,24 +35,24 @@ public class MyList<T> implements List<T> {
 	@Override
 	public int size() {
 		int count = 0;
-		Node<T> current = head;
-		while (current != null) {
-			count++;
-			current = current.getNext();
-		}
-		return count;
+    	Node<T> current = head;
+    	while (current != null) {
+        	count++;
+        	current = current.getNext();
+    	}
+    	return count;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return head == null;
+		return head==null;
 	}
 
 	@Override
 	public boolean contains(Object o) {
 		Node<T> currentNode = head;
-		while (currentNode != null) {
-			if (currentNode.getValue().equals(o)) {
+		while(currentNode != null){
+			if(currentNode.getValue().equals(o)){
 				return true;
 			}
 			currentNode = currentNode.getNext();
@@ -73,7 +73,7 @@ public class MyList<T> implements List<T> {
 	}
 
 	@Override
-	// comentario de prueba git
+	//comentario de prueba git
 	public <T> T[] toArray(T[] a) {
 		int size = 0;
 		Node<T> current = (Node<T>) head;
@@ -85,12 +85,12 @@ public class MyList<T> implements List<T> {
 		if (a.length < size) {
 			a = (T[]) Array.newInstance(a.getClass().getComponentType(), size);
 		}
-
+		
 		current = (Node<T>) head;
 		int index = 0;
 		while (current != null) {
 			a[index++] = (T) current.getValue();
-			current = current.getNext();
+			current = current.getNext(); 
 		}
 
 		if (a.length > size) {
@@ -101,19 +101,17 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean remove(Object o) {
-		Node<T> actual = head, previous = null;
-		while (actual != null) {
-			if ((actual.getValue()).equals(o)) {
-				if (previous == null)
-					head = actual.getNext();
-				else
-					previous.setNext((actual.getNext()));
-				return true;
-			}
-			previous = actual;
-			actual = actual.getNext();
-		}
-		return false;
+        Node<T> actual = head, previous = null;
+        while (actual != null) {
+            if ((actual.getValue()).equals(o)) {
+                if (previous == null) head = actual.getNext();
+                else previous.setNext((actual.getNext()));
+                return true;
+            }
+            previous = actual;
+            actual = actual.getNext();
+        }
+        return false;
 	}
 
 	@Override
@@ -255,7 +253,7 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public T remove(int index) {
-		if (index < 0) {
+		if (index < 0){
 			throw new ArrayIndexOutOfBoundsException();
 		}
 		if (index == 0) {
@@ -265,7 +263,7 @@ public class MyList<T> implements List<T> {
 		}
 		Node<T> current = head.getNext();
 		Node<T> previous = head;
-		for (int i = 0; i < index - 1; i++) {
+		for (int i = 0; i < index-1; i++) {
 			current = current.getNext();
 			previous = previous.getNext();
 		}
@@ -293,7 +291,7 @@ public class MyList<T> implements List<T> {
 	}
 
 	@Override
-	public ListIterator<T> listIterator(int index) { 
+	public ListIterator<T> listIterator(int index) {
 		if (index < 0 || index > size()) {
 			throw new IndexOutOfBoundsException();
 		}
@@ -304,6 +302,7 @@ public class MyList<T> implements List<T> {
 			currentIndex = currentIndex.getNext();
 		}
 		return list.listIterator(index);
+
 	}
 
 	@Override
