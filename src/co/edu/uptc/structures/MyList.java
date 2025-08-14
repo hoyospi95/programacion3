@@ -1,6 +1,7 @@
 package co.edu.uptc.structures;
 
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -72,7 +73,6 @@ public class MyList<T> implements List<T> {
 	}
 
 	@Override
-	//comentario de prueba git
 	public <T> T[] toArray(T[] a) {
 		int size = 0;
 		Node<T> current = (Node<T>) head;
