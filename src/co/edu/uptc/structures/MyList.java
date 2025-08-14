@@ -280,8 +280,7 @@ public class MyList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+       return getNodeAt(index).getValue();
     }
 
     public T set(int index, T element) {
