@@ -1,5 +1,6 @@
 package co.edu.uptc.structures;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -81,6 +82,25 @@ public class MyList<T> implements List<T> {
 		};
 	}
 
+    public Iterator<T> reverseIterator() {
+		return new Iterator<T>() {
+			private Node<T> current = tail;
+			@Override
+			public boolean hasNext() {
+				return current != null;
+			}
+			@Override
+			public T next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException();
+				}
+				T value = current.getValue();
+				current = current.getPrevious();
+				return value;
+			}
+		};
+	}
+
     @Override
     public Object[] toArray() {
         Object[] result = new Object[size()];
@@ -140,7 +160,7 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-       if (c == null) {
+        if (c == null) {
 			throw new NullPointerException("The specified collection is null");
 		}
 
