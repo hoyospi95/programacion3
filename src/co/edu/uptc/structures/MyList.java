@@ -63,23 +63,25 @@ public class MyList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-		return new Iterator<T>() {
-			private Node<T> current = head;
-			@Override
-			public boolean hasNext() {
-				return current != null;
-			}
-			@Override
-			public T next() {
-				if (!hasNext()) {
-					throw new NoSuchElementException();
-				}
-				T value = current.getValue();
-				current = current.getNext();
-				return value;
-			}
-		};
-	}
+        return new Iterator<T>() {
+            private Node<T> current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                T value = current.getValue();
+                current = current.getNext();
+                return value;
+            }
+        };
+    }
 
     @Override
     public Object[] toArray() {
@@ -140,34 +142,35 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-       if (c == null) {
-			throw new NullPointerException("The specified collection is null");
-		}
+        if (c == null) {
+            throw new NullPointerException("The specified collection is null");
+        }
 
-		for (Object searchElement : c) {
-			boolean found = false;
-			Node<T> current = head;
+        for (Object searchElement : c) {
+            boolean found = false;
+            Node<T> current = head;
 
-			while (current != null) {
-				T listElement = current.getValue();
+            while (current != null) {
+                T listElement = current.getValue();
 
-				if ((searchElement == null && listElement == null) ||
-						(searchElement != null && searchElement.equals(listElement))) {
-					found = true;
-					break;
-				}
-				current = current.getNext();
-			}
+                if ((searchElement == null && listElement == null) ||
+                        (searchElement != null && searchElement.equals(listElement))) {
+                    found = true;
+                    break;
+                }
+                current = current.getNext();
+            }
 
-			if (!found) {
-				return false;
-			}
-		}
-		return true;
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
+        // El metodo addAll no requiere cambios, depende del metodo add(T)
         if (c == null) {
             throw new NullPointerException("La colección no puede ser null.");
         }
@@ -296,7 +299,7 @@ public class MyList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-       return getNodeAt(index).getValue();
+        return getNodeAt(index).getValue();
     }
 
     public T set(int index, T element) {
