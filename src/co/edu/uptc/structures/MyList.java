@@ -296,6 +296,7 @@ public class MyList<T> implements List<T> {
 
     @Override
     public T get(int index) {
+        //El método get(int index) no necesita ser modificado.
        return getNodeAt(index).getValue();
     }
 
