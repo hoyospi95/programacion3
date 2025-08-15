@@ -380,6 +380,7 @@ public class MyList<T> implements List<T> {
 
     @Override
     public int indexOf(Object o) {
+        //El metodo indexOf(Object) no necesita ser modificado
         int index = 0;
         Node<T> current = head;
         while (current != null) {
