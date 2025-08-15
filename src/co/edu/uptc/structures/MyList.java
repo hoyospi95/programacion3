@@ -4,10 +4,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 public class MyList<T> implements List<T> {
 
     private Node<T> head;
+    private Node<T> tail;
 
     @Override
     public boolean add(T e) {
@@ -61,9 +63,23 @@ public class MyList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
-    }
+		return new Iterator<T>() {
+			private Node<T> current = head;
+			@Override
+			public boolean hasNext() {
+				return current != null;
+			}
+			@Override
+			public T next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException();
+				}
+				T value = current.getValue();
+				current = current.getNext();
+				return value;
+			}
+		};
+	}
 
     @Override
     public Object[] toArray() {
