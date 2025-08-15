@@ -12,19 +12,24 @@ public class MyList<T> implements List<T> {
     private Node<T> tail;
 
     @Override
-    public boolean add(T e) {
+    public boolean add(T e) { //implementacion mateo
         boolean added = false;
-        if (head == null) {
-            head = new Node<T>(e);
+        
+        if (isEmpty()) {
+            this.head = new Node<T>(e);
+            this.tail = head;
             added = true;
-        } else {
-            Node<T> actual = head;
-            while (actual.getNext() != null) {
-                actual = actual.getNext();
+        }else{
+                    Node<T> previous = tail;
+                    tail = new Node<T>(e);
+                    previous.setNext(tail);
+                    tail.setPrevious(previous);
+                    added = true;
+                
             }
-            actual.setNext(new Node<T>(e));
-            added = true;
-        }
+             
+        
+        
         return added;
     }
 
