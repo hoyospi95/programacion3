@@ -321,7 +321,8 @@ public class MyList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        return getNodeAt(index).getValue();
+        //El método get(int index) no necesita ser modificado.
+       return getNodeAt(index).getValue();
     }
 
     public T set(int index, T element) {
