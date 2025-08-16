@@ -175,7 +175,6 @@ public class MyList<T> implements List<T> {
 
             while (current != null) {
                 T listElement = current.getValue();
-
                 if ((searchElement == null && listElement == null)
                         || (searchElement != null && searchElement.equals(listElement))) {
                     found = true;
@@ -193,6 +192,7 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
+        // El metodo addAll no requiere cambios, depende del metodo add(T)
         if (c == null) {
             throw new NullPointerException("La colección no puede ser null.");
         }
