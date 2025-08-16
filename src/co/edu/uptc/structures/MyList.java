@@ -56,7 +56,7 @@ public class MyList<T> implements List<T> {
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(Object o) {//No requiere edición
         Node<T> currentNode = head;
         while (currentNode != null) {
             if (currentNode.getValue().equals(o)) {
