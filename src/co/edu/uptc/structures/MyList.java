@@ -106,6 +106,7 @@ public class MyList<T> implements List<T> {
 				return value;
 			}
 		};
+        //Funciona para lista doblemenete enlazada tambien
 	}
 
     @Override
