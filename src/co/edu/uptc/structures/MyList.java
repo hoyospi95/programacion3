@@ -89,6 +89,25 @@ public class MyList<T> implements List<T> {
         };
     }
 
+    public Iterator<T> reverseIterator() {
+		return new Iterator<T>() {
+			private Node<T> current = tail;
+			@Override
+			public boolean hasNext() {
+				return current != null;
+			}
+			@Override
+			public T next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException();
+				}
+				T value = current.getValue();
+				current = current.getPrevious();
+				return value;
+			}
+		};
+	}
+
     @Override
     public Object[] toArray() {
         Object[] result = new Object[size()];
