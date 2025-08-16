@@ -364,22 +364,31 @@ public class MyList<T> implements List<T> {
             throw new IndexOutOfBoundsException("Indice fuera de rango");
         }
 
+        Node<T> newNode = new Node<T>(element);
+
         if (index == 0) {
-            Node<T> newNode = new Node<T>(element);
             newNode.setNext(head);
+            if (head != null) {
+                head.setPrevious(newNode);
+            }
             head = newNode;
+            if (tail == null) {
+                tail = newNode;
+            }
         } else {
             Node<T> actual = head;
-
-            for (int i = 0; i < index - 1 && actual.getNext() != null; i++) {
+            for (int i = 0; i < index - 1; i++) {
                 actual = actual.getNext();
             }
-
-            Node<T> newNode = new Node<T>(element);
             newNode.setNext(actual.getNext());
+            newNode.setPrevious(actual);
+            if (actual.getNext() != null) {
+                actual.getNext().setPrevious(newNode);
+            } else {
+                tail = newNode;
+            }
             actual.setNext(newNode);
         }
-
     }
 
     @Override
