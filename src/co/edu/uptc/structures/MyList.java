@@ -122,20 +122,37 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean remove(Object o) {
-        Node<T> actual = head, previous = null;
-        while (actual != null) {
-            if ((actual.getValue()).equals(o)) {
-                if (previous == null) {
-                    head = actual.getNext();
-                } else {
-                    previous.setNext((actual.getNext()));
-                }
-                return true;
-            }
-            previous = actual;
-            actual = actual.getNext();
+      if(o == null){
+            throw new NullPointerException("The element to remove cannot be null");
         }
-        return false;
+        if (head != null && o != null && !o.getClass().isAssignableFrom(head.getValue().getClass())) {
+            throw new ClassCastException("The element to remove is not compatible with the list type");
+        }
+        if(head == null){ 
+            throw new UnsupportedOperationException("Cannot remove from an empty list");
+        }
+        Node<T> current = head ; 
+        while (current != null) {
+            if(o.equals(current.getValue())) {
+                if(current.getPrevious() == null) {
+                    head = current.getNext();
+                if(head != null) {
+                    head.setPrevious(null);
+                }else {
+                    tail = null;
+                }
+            } else if(current.getNext() == null) {
+                    tail = current.getPrevious();
+                    tail.setNext(null);
+            }else{
+                current.getPrevious().setNext(current.getNext());
+                current.getNext().setPrevious(current.getPrevious());
+            }
+            return true; 
+        }
+        current = current.getNext() ; 
+    } 
+    return false;
     }
 
     @Override
