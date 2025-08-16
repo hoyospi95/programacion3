@@ -13,19 +13,24 @@ public class MyList<T> implements List<T> {
     private Node<T> tail;
 
     @Override
-    public boolean add(T e) {
+    public boolean add(T e) { //implementacion mateo
         boolean added = false;
-        if (head == null) {
-            head = new Node<T>(e);
+        
+        if (isEmpty()) {
+            this.head = new Node<T>(e);
+            this.tail = head;
             added = true;
-        } else {
-            Node<T> actual = head;
-            while (actual.getNext() != null) {
-                actual = actual.getNext();
+        }else{
+                    Node<T> previous = tail;
+                    tail = new Node<T>(e);
+                    previous.setNext(tail);
+                    tail.setPrevious(previous);
+                    added = true;
+                
             }
-            actual.setNext(new Node<T>(e));
-            added = true;
-        }
+             
+        
+        
         return added;
     }
 
@@ -51,7 +56,7 @@ public class MyList<T> implements List<T> {
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(Object o) {//No requiere edición
         Node<T> currentNode = head;
         while (currentNode != null) {
             if (currentNode.getValue().equals(o)) {
@@ -64,23 +69,25 @@ public class MyList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-		return new Iterator<T>() {
-			private Node<T> current = head;
-			@Override
-			public boolean hasNext() {
-				return current != null;
-			}
-			@Override
-			public T next() {
-				if (!hasNext()) {
-					throw new NoSuchElementException();
-				}
-				T value = current.getValue();
-				current = current.getNext();
-				return value;
-			}
-		};
-	}
+        return new Iterator<T>() {
+            private Node<T> current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                T value = current.getValue();
+                current = current.getNext();
+                return value;
+            }
+        };
+    }
 
     public Iterator<T> reverseIterator() {
 		return new Iterator<T>() {
@@ -142,52 +149,69 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean remove(Object o) {
-        Node<T> actual = head, previous = null;
-        while (actual != null) {
-            if ((actual.getValue()).equals(o)) {
-                if (previous == null) {
-                    head = actual.getNext();
-                } else {
-                    previous.setNext((actual.getNext()));
-                }
-                return true;
-            }
-            previous = actual;
-            actual = actual.getNext();
+      if(o == null){
+            throw new NullPointerException("The element to remove cannot be null");
         }
-        return false;
+        if (head != null && o != null && !o.getClass().isAssignableFrom(head.getValue().getClass())) {
+            throw new ClassCastException("The element to remove is not compatible with the list type");
+        }
+        if(head == null){ 
+            throw new UnsupportedOperationException("Cannot remove from an empty list");
+        }
+        Node<T> current = head ; 
+        while (current != null) {
+            if(o.equals(current.getValue())) {
+                if(current.getPrevious() == null) {
+                    head = current.getNext();
+                if(head != null) {
+                    head.setPrevious(null);
+                }else {
+                    tail = null;
+                }
+            } else if(current.getNext() == null) {
+                    tail = current.getPrevious();
+                    tail.setNext(null);
+            }else{
+                current.getPrevious().setNext(current.getNext());
+                current.getNext().setPrevious(current.getPrevious());
+            }
+            return true; 
+        }
+        current = current.getNext() ; 
+    } 
+    return false;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
         if (c == null) {
-			throw new NullPointerException("The specified collection is null");
-		}
+            throw new NullPointerException("The specified collection is null");
+        }
 
-		for (Object searchElement : c) {
-			boolean found = false;
-			Node<T> current = head;
+        for (Object searchElement : c) {
+            boolean found = false;
+            Node<T> current = head;
 
-			while (current != null) {
-				T listElement = current.getValue();
+            while (current != null) {
+                T listElement = current.getValue();
+                if ((searchElement == null && listElement == null)
+                        || (searchElement != null && searchElement.equals(listElement))) {
+                    found = true;
+                    break;
+                }
+                current = current.getNext();
+            }
 
-				if ((searchElement == null && listElement == null) ||
-						(searchElement != null && searchElement.equals(listElement))) {
-					found = true;
-					break;
-				}
-				current = current.getNext();
-			}
-
-			if (!found) {
-				return false;
-			}
-		}
-		return true;
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> c) {
+        // El metodo addAll no requiere cambios, depende del metodo add(T)
         if (c == null) {
             throw new NullPointerException("La colección no puede ser null.");
         }
@@ -316,6 +340,7 @@ public class MyList<T> implements List<T> {
 
     @Override
     public T get(int index) {
+        //El método get(int index) no necesita ser modificado.
        return getNodeAt(index).getValue();
     }
 
@@ -359,22 +384,31 @@ public class MyList<T> implements List<T> {
             throw new IndexOutOfBoundsException("Indice fuera de rango");
         }
 
+        Node<T> newNode = new Node<T>(element);
+
         if (index == 0) {
-            Node<T> newNode = new Node<T>(element);
             newNode.setNext(head);
+            if (head != null) {
+                head.setPrevious(newNode);
+            }
             head = newNode;
+            if (tail == null) {
+                tail = newNode;
+            }
         } else {
             Node<T> actual = head;
-
-            for (int i = 0; i < index - 1 && actual.getNext() != null; i++) {
+            for (int i = 0; i < index - 1; i++) {
                 actual = actual.getNext();
             }
-
-            Node<T> newNode = new Node<T>(element);
             newNode.setNext(actual.getNext());
+            newNode.setPrevious(actual);
+            if (actual.getNext() != null) {
+                actual.getNext().setPrevious(newNode);
+            } else {
+                tail = newNode;
+            }
             actual.setNext(newNode);
         }
-
     }
 
     @Override
@@ -400,6 +434,7 @@ public class MyList<T> implements List<T> {
 
     @Override
     public int indexOf(Object o) {
+        //El metodo indexOf(Object) no necesita ser modificado
         int index = 0;
         Node<T> current = head;
         while (current != null) {
@@ -420,79 +455,27 @@ public class MyList<T> implements List<T> {
 
     @Override
     public int lastIndexOf(Object o) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'lastIndexOf'");
+        int index = size() - 1;
+        Node<T> current = tail;
+        while (current != null) {
+            if (o == null) {
+                if (current.getValue() == null) {
+                    return index;
+                }
+            } else {
+                if (o.equals(current.getValue())) {
+                    return index;
+                }
+            }
+            index--;
+            current = current.getPrevious();
+        }
+        return -1;
     }
 
     @Override
     public ListIterator<T> listIterator() {
         return listIterator(0);
-        /*
-         * El metodo listIterador() tiene que utilizar el metodo listIterador(int index)
-         * para seguir las normas
-         * de codigo limpio es decir, no crear codigo duplicado pero en tal caso de que
-         * el metodo con el index
-         * no funcione este tampoco funcionaria ya que este metodo depende directamente
-         * del otro por lo que
-         * hice este comentario con lo que deberia contener en tal caso que es
-         * implementarlo sin parametros.
-         * Node<T> current = head;
-         * int index = 0;
-         * 
-         * return new ListIterator<T>() {
-         * Node<T> cursor = current;
-         * int cursorIndex = index;
-         * 
-         * @Override
-         * public boolean hasNext() {
-         * return cursor != null;
-         * }
-         * 
-         * @Override
-         * public T next() {
-         * if (!hasNext()) throw new NoSuchElementException();
-         * T value = cursor.data;
-         * cursor = cursor.next;
-         * cursorIndex++;
-         * return value;
-         * }
-         * 
-         * @Override
-         * public boolean hasPrevious() {
-         * return cursorIndex > 0;
-         * }
-         * 
-         * @Override
-         * public T previous() {
-         * throw new UnsupportedOperationException("Retroceso no implementado");
-         * }
-         * 
-         * @Override
-         * public int nextIndex() {
-         * return cursorIndex;
-         * }
-         * 
-         * @Override
-         * public int previousIndex() {
-         * return cursorIndex - 1;
-         * }
-         * 
-         * @Override
-         * public void remove() {
-         * throw new UnsupportedOperationException("Remove no implementado");
-         * }
-         * 
-         * @Override
-         * public void set(T e) {
-         * throw new UnsupportedOperationException("Set no implementado");
-         * }
-         * 
-         * @Override
-         * public void add(T e) {
-         * throw new UnsupportedOperationException("Add no implementado");
-         * }
-         * };
-         */
     }
 
     @Override
