@@ -235,22 +235,61 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
+        boolean modified=false;
         if (index < 0 || index > size()) {
-            throw new IndexOutOfBoundsException("index " + index + " is out of range");
+            throw new IndexOutOfBoundsException("index " + index + " no está en el rango");
         }
-        if (c.isEmpty()) {
-            return false;
-        }
-        for (T t : c) {
-            if (t == null) {
-                throw new NullPointerException("this list does not permit null elements");
+        if (c!= null && !c.isEmpty()){
+            Node<T> firstNew = null;
+            Node<T> lastNew=null;
+            for (T t:c){
+                if (t != null){
+                    Node<T> newNode = new Node<>(t);
+                    if (firstNew == null) {
+                        firstNew = newNode;
+                    } else {
+                        lastNew.setNext(newNode);
+                        newNode.setPrevious(lastNew);
+                    }
+                    lastNew = newNode;
+                }
+                else{
+                    throw new NullPointerException("Esta lista no admite valores nulos");
+                }
             }
+            if (index == 0) {
+                if (head != null) {
+                    lastNew.setNext(head);
+                    head.setPrevious(lastNew);
+                } else {
+                    tail = lastNew;
+                }
+                head = firstNew;
+            } else if (index == size()) {
+                if (tail != null) {
+                    tail.setNext(firstNew);
+                    firstNew.setPrevious(tail);
+                } else {
+                    head = firstNew;
+                }
+                tail = lastNew;
+            } else {
+                Node<T> current = head;
+                for (int i = 0; i < index; i++) {
+                    current = current.getNext();
+                }
+                Node<T> prev = current.getPrevious();
+                if (prev != null) {
+                    prev.setNext(firstNew);
+                    firstNew.setPrevious(prev);
+                }
+                lastNew.setNext(current);
+                current.setPrevious(lastNew);
+            }
+            modified=true;
         }
-        for (T t : c) {
-            this.add(index++, t);
-        }
-		return true;
-	}
+        return modified;
+    }
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
