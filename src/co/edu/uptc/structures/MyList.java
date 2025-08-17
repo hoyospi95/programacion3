@@ -294,10 +294,6 @@ public class MyList<T> implements List<T> {
         return removed;
     }
 
-    private boolean permiteNulls() {
-        return true;
-	}
-
 	@Override
 	public boolean retainAll(Collection<?> c) {
 		boolean changed = false;
