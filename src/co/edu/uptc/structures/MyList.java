@@ -1,5 +1,6 @@
 package co.edu.uptc.structures;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -63,23 +64,25 @@ public class MyList<T> implements List<T> {
 
     @Override
     public Iterator<T> iterator() {
-		return new Iterator<T>() {
-			private Node<T> current = head;
-			@Override
-			public boolean hasNext() {
-				return current != null;
-			}
-			@Override
-			public T next() {
-				if (!hasNext()) {
-					throw new NoSuchElementException();
-				}
-				T value = current.getValue();
-				current = current.getNext();
-				return value;
-			}
-		};
-	}
+        return new Iterator<T>() {
+            private Node<T> current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                T value = current.getValue();
+                current = current.getNext();
+                return value;
+            }
+        };
+    }
 
     @Override
     public Object[] toArray() {
@@ -140,30 +143,30 @@ public class MyList<T> implements List<T> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-       if (c == null) {
-			throw new NullPointerException("The specified collection is null");
-		}
+        if (c == null) {
+            throw new NullPointerException("The specified collection is null");
+        }
 
-		for (Object searchElement : c) {
-			boolean found = false;
-			Node<T> current = head;
+        for (Object searchElement : c) {
+            boolean found = false;
+            Node<T> current = head;
 
-			while (current != null) {
-				T listElement = current.getValue();
+            while (current != null) {
+                T listElement = current.getValue();
 
-				if ((searchElement == null && listElement == null) ||
-						(searchElement != null && searchElement.equals(listElement))) {
-					found = true;
-					break;
-				}
-				current = current.getNext();
-			}
+                if ((searchElement == null && listElement == null) ||
+                        (searchElement != null && searchElement.equals(listElement))) {
+                    found = true;
+                    break;
+                }
+                current = current.getNext();
+            }
 
-			if (!found) {
-				return false;
-			}
-		}
-		return true;
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -213,36 +216,33 @@ public class MyList<T> implements List<T> {
         if (c == null) {
             throw new NullPointerException("La colección especificada es null");
         }
-
-        if (!permiteNulls() && c.contains(null)) {
+        if (c.contains(null)) {
             throw new NullPointerException(
                     "La colección contiene null y esta lista no admite elementos null");
-        }
-
-        try {
-            for (Object obj : c) {
-                contains(obj);
-            }
-        } catch (ClassCastException e) {
-            throw new ClassCastException(
-                    "Un elemento de la colección es incompatible con el tipo de esta lista");
-        }
-
-        if (head == null) {
-            return false;
         }
 
         boolean removed = false;
 
         while (head != null && c.contains(head.getValue())) {
             head = head.getNext();
+            if (head != null) {
+                head.setPrevious(null);
+            } else {
+                tail = null;
+            }
             removed = true;
         }
 
         Node<T> current = head;
-        while (current != null && current.getNext() != null) {
-            if (c.contains(current.getNext().getValue())) {
-                current.setNext(current.getNext().getNext());
+        while (current != null) {
+            Node<T> nextNode = current.getNext();
+            if (nextNode != null && c.contains(nextNode.getValue())) {
+                current.setNext(nextNode.getNext());
+                if (nextNode.getNext() != null) {
+                    nextNode.getNext().setPrevious(current);
+                } else {
+                    tail = current;
+                }
                 removed = true;
             } else {
                 current = current.getNext();
@@ -252,9 +252,6 @@ public class MyList<T> implements List<T> {
         return removed;
     }
 
-    private boolean permiteNulls() {
-        return true;
-    }
 
     @Override
     public boolean retainAll(Collection<?> c) {
@@ -296,7 +293,7 @@ public class MyList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-       return getNodeAt(index).getValue();
+        return getNodeAt(index).getValue();
     }
 
     public T set(int index, T element) {
