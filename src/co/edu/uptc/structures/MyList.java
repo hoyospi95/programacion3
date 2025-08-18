@@ -143,6 +143,7 @@ public class MyList<T> implements List<T> {
 			a[index++] = (E) current.getValue();
 			current = current.getNext(); 
 		}
+        return a;
   }
 
     @Override
@@ -296,36 +297,33 @@ public class MyList<T> implements List<T> {
         if (c == null) {
             throw new NullPointerException("La colección especificada es null");
         }
-
-        if (!permiteNulls() && c.contains(null)) {
+        if (c.contains(null)) {
             throw new NullPointerException(
                     "La colección contiene null y esta lista no admite elementos null");
-        }
-
-        try {
-            for (Object obj : c) {
-                contains(obj);
-            }
-        } catch (ClassCastException e) {
-            throw new ClassCastException(
-                    "Un elemento de la colección es incompatible con el tipo de esta lista");
-        }
-
-        if (head == null) {
-            return false;
         }
 
         boolean removed = false;
 
         while (head != null && c.contains(head.getValue())) {
             head = head.getNext();
+            if (head != null) {
+                head.setPrevious(null);
+            } else {
+                tail = null;
+            }
             removed = true;
         }
 
         Node<T> current = head;
-        while (current != null && current.getNext() != null) {
-            if (c.contains(current.getNext().getValue())) {
-                current.setNext(current.getNext().getNext());
+        while (current != null) {
+            Node<T> nextNode = current.getNext();
+            if (nextNode != null && c.contains(nextNode.getValue())) {
+                current.setNext(nextNode.getNext());
+                if (nextNode.getNext() != null) {
+                    nextNode.getNext().setPrevious(current);
+                } else {
+                    tail = current;
+                }
                 removed = true;
             } else {
                 current = current.getNext();
@@ -334,10 +332,6 @@ public class MyList<T> implements List<T> {
 
         return removed;
     }
-
-    private boolean permiteNulls() {
-        return true;
-	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
