@@ -144,8 +144,8 @@ public class MyList<T> implements List<T> {
 			a[index++] = (E) current.getValue();
 			current = current.getNext(); 
 		}
-		
-		return a;
+
+    return a;
   }
 
     @Override
@@ -238,58 +238,94 @@ public class MyList<T> implements List<T> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends T> c) {
+        boolean modified=false;
         if (index < 0 || index > size()) {
-            throw new IndexOutOfBoundsException("index " + index + " is out of range");
+            throw new IndexOutOfBoundsException("index " + index + " no está en el rango");
         }
-        if (c.isEmpty()) {
-            return false;
-        }
-        for (T t : c) {
-            if (t == null) {
-                throw new NullPointerException("this list does not permit null elements");
+        if (c!= null && !c.isEmpty()){
+            Node<T> firstNew = null;
+            Node<T> lastNew=null;
+            for (T t:c){
+                if (t != null){
+                    Node<T> newNode = new Node<>(t);
+                    if (firstNew == null) {
+                        firstNew = newNode;
+                    } else {
+                        lastNew.setNext(newNode);
+                        newNode.setPrevious(lastNew);
+                    }
+                    lastNew = newNode;
+                }
+                else{
+                    throw new NullPointerException("Esta lista no admite valores nulos");
+                }
             }
+            if (index == 0) {
+                if (head != null) {
+                    lastNew.setNext(head);
+                    head.setPrevious(lastNew);
+                } else {
+                    tail = lastNew;
+                }
+                head = firstNew;
+            } else if (index == size()) {
+                if (tail != null) {
+                    tail.setNext(firstNew);
+                    firstNew.setPrevious(tail);
+                } else {
+                    head = firstNew;
+                }
+                tail = lastNew;
+            } else {
+                Node<T> current = head;
+                for (int i = 0; i < index; i++) {
+                    current = current.getNext();
+                }
+                Node<T> prev = current.getPrevious();
+                if (prev != null) {
+                    prev.setNext(firstNew);
+                    firstNew.setPrevious(prev);
+                }
+                lastNew.setNext(current);
+                current.setPrevious(lastNew);
+            }
+            modified=true;
         }
-        for (T t : c) {
-            this.add(index++, t);
-        }
-		return true;
-	}
+        return modified;
+    }
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
         if (c == null) {
             throw new NullPointerException("La colección especificada es null");
         }
-
-        if (!permiteNulls() && c.contains(null)) {
+        if (c.contains(null)) {
             throw new NullPointerException(
                     "La colección contiene null y esta lista no admite elementos null");
-        }
-
-        try {
-            for (Object obj : c) {
-                contains(obj);
-            }
-        } catch (ClassCastException e) {
-            throw new ClassCastException(
-                    "Un elemento de la colección es incompatible con el tipo de esta lista");
-        }
-
-        if (head == null) {
-            return false;
         }
 
         boolean removed = false;
 
         while (head != null && c.contains(head.getValue())) {
             head = head.getNext();
+            if (head != null) {
+                head.setPrevious(null);
+            } else {
+                tail = null;
+            }
             removed = true;
         }
 
         Node<T> current = head;
-        while (current != null && current.getNext() != null) {
-            if (c.contains(current.getNext().getValue())) {
-                current.setNext(current.getNext().getNext());
+        while (current != null) {
+            Node<T> nextNode = current.getNext();
+            if (nextNode != null && c.contains(nextNode.getValue())) {
+                current.setNext(nextNode.getNext());
+                if (nextNode.getNext() != null) {
+                    nextNode.getNext().setPrevious(current);
+                } else {
+                    tail = current;
+                }
                 removed = true;
             } else {
                 current = current.getNext();
@@ -298,10 +334,6 @@ public class MyList<T> implements List<T> {
 
         return removed;
     }
-
-    private boolean permiteNulls() {
-        return true;
-	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
