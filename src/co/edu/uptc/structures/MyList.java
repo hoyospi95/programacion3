@@ -122,6 +122,7 @@ public class MyList<T> implements List<T> {
 		}
 		return array;
 	}
+	
 	@SuppressWarnings({"unchecked"})
 	@Override
 	public <E> E[] toArray(E[] a) {
@@ -143,6 +144,8 @@ public class MyList<T> implements List<T> {
 			a[index++] = (E) current.getValue();
 			current = current.getNext(); 
 		}
+		
+		return a;
   }
 
     @Override
