@@ -511,6 +511,9 @@ public class MyList<T> implements List<T> {
     @Override
     public ListIterator<T> listIterator() {
         return listIterator(0);
+
+        /*no tiene nada porque no hace el trabajo el mismo,
+        Su única misión es delegar la operación en el método listIterator(int index) arrancando desde la posición 0. */
     }
 
     @Override
